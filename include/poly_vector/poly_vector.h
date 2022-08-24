@@ -10,13 +10,13 @@
 namespace kg {
 
 namespace detail {
-    template<typename From, typename To>
-    constexpr void uninitialized_construct(From* dst, To *src) {
-        if constexpr(std::move_constructible<To>) {
-            std::construct_at<To, To&&>(static_cast<To*>(dst), std::move(*src));
+    template<typename To, typename From>
+    constexpr void uninitialized_construct(To* dst, From *src) {
+        if constexpr(std::move_constructible<From>) {
+            std::construct_at<From, From&&>(static_cast<From*>(dst), std::move(*src));
         } else /*if constexpr(std::is_copy_constructible_v<To>)*/ {
-            static_assert(std::constructible_from<To, To&>, "type is not copy- or move-constructible");
-            std::construct_at<To, To const&>(static_cast<To*>(dst), *src);
+            static_assert(std::constructible_from<From, From&>, "type is not copy- or move-constructible");
+            std::construct_at<From, From const&>(static_cast<From*>(dst), *src);
         }
     }
 }
