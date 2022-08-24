@@ -4,8 +4,8 @@
 #include <cstddef>
 #include <vector>
 
-#define PV_BASE(BASE) virtual void uninitialized_construct(BASE* /*dst*/) = 0
-#define PV_IMPL(BASE) void uninitialized_construct(BASE* dst) override { kg::detail::uninitialized_construct(dst, this); }
+#define PV_BASE(BASE) using pv_base = BASE; virtual void uninitialized_construct(pv_base* /*dst*/) = 0
+#define PV_IMPL() void uninitialized_construct(pv_base* dst) override { kg::detail::uninitialized_construct(dst, this); }
 
 namespace kg {
 
@@ -52,8 +52,8 @@ public:
             bytes = std::move(newbytes);
         }
         
-        T* dest_t = reinterpret_cast<T*>(bytes.data() + curr_offset);
-        detail::uninitialized_construct<T,T>(dest_t, &t);
+        Base* dest_t = reinterpret_cast<Base*>(bytes.data() + curr_offset);
+        detail::uninitialized_construct(dest_t, &t);
         offsets.push_back(curr_offset);
         total_size += sizeof(T);
     }
