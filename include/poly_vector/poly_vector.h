@@ -34,8 +34,7 @@ public:
 
     template<typename T>
     /*constexpr*/ void add(T&& t) noexcept {
-        size_t const curr_offset = total_size;
-        size_t const newsize = curr_offset + sizeof(T);
+        size_t const newsize = total_size + sizeof(T);
         
         if (newsize > bytes.capacity()) {
             size_t const vecsize = calc_growth(newsize);
@@ -52,9 +51,9 @@ public:
             bytes = std::move(newbytes);
         }
         
-        Base* dest_t = reinterpret_cast<Base*>(bytes.data() + curr_offset);
+        Base* dest_t = reinterpret_cast<Base*>(bytes.data() + total_size);
         detail::uninitialized_construct(dest_t, &t);
-        offsets.push_back(curr_offset);
+        offsets.push_back(total_size);
         total_size += sizeof(T);
     }
 
