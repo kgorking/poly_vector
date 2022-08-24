@@ -10,10 +10,6 @@ struct base_poly {
 	virtual int run() {
 		return 0;
 	};
-
-	virtual void const* address() const {
-		return static_cast<void const*>(this);
-	}
 };
 
 struct impl1_poly : base_poly {
@@ -44,6 +40,7 @@ struct impl2_poly : base_poly {
 		return stuff;
 	};
 };
+
 
 TEST_CASE("poly_vector specification") {
 	SECTION("A new poly_vector is empty") {
