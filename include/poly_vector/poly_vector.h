@@ -53,8 +53,7 @@ public:
         }
         
         T* dest_t = reinterpret_cast<T*>(bytes.data() + curr_offset);
-        detail::uninitialized_construct<T,T>(&t, dest_t);
-        //std::construct_at(dest_t, std::forward<T>(t));
+        detail::uninitialized_construct<T,T>(dest_t, &t);
         offsets.push_back(curr_offset);
         total_size += sizeof(T);
     }
