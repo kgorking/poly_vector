@@ -5,7 +5,7 @@
 #include <vector>
 
 #define PV_BASE(BASE) virtual void uninitialized_construct(BASE* /*dst*/) = 0
-#define PV_IMPL(CLS, BASE) void uninitialized_construct(BASE* dst) override { kg::detail::uninitialized_construct(dst, this); }
+#define PV_IMPL(BASE) void uninitialized_construct(BASE* dst) override { kg::detail::uninitialized_construct(dst, this); }
 
 namespace kg {
 

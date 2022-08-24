@@ -21,7 +21,7 @@ struct impl1_poly : base_poly {
 
 	impl1_poly(int s) : stuff(s) {}
 
-	PV_IMPL(impl1_poly, base_poly);
+	PV_IMPL(base_poly);
 
 	int run() override {
 		return stuff;
@@ -38,7 +38,7 @@ struct impl2_poly : base_poly {
     impl2_poly(impl2_poly const&) = default;
 	impl2_poly(int s) : stuff(s), so_much_stuff(s) {}
 
-	PV_IMPL(impl2_poly, base_poly);
+	PV_IMPL(base_poly);
 
 	int run() override {
 		return stuff;
