@@ -1,4 +1,6 @@
-#pragma once
+#ifndef POLY_VECTOR_H
+#define POLY_VECTOR_H
+
 #include <type_traits>
 #include <memory>
 #include <cstddef>
@@ -109,3 +111,5 @@ private:
     std::vector<std::size_t> offsets;
 };
 } // namespace kg
+
+#endif //!POLY_VECTOR_H
