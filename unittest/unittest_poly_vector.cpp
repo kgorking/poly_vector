@@ -30,58 +30,61 @@ struct ctr_counter {
 	ctr_counter& operator=(ctr_counter const&) = default;
 };
 
-struct base {
-	virtual ~base() = default;
+class test_base {
+public:
+	virtual ~test_base() = default;
 
 	virtual int run() {
 		return 0;
 	};
 
-	PV_BASE(base);
+	PV_BASE(test_base);
 };
 
-struct impl1 : base {
+class impl1 : public test_base {
 	int stuff = 1;
 
-	impl1(int s) : stuff(s) {}
+public:
+	explicit impl1(int s) : stuff(s) {}
 
 	int run() override {
 		return stuff;
 	};
 
-	PV_IMPL(base);
+	PV_IMPL(test_base);
 };
 
 template <size_t N>
-struct impl2 : base {
+class impl2 : public test_base {
 	char some_more_stuff[N] = {};
 	int stuff = 99;
     std::vector<char> so_much_stuff;
 
-	impl2(int s) : stuff(s), so_much_stuff(s) {}
+public:
+	explicit impl2(int s) : stuff(s), so_much_stuff(s) {}
 
 	int run() override {
 		return stuff;
 	};
 
-	PV_IMPL(base);
+	PV_IMPL(test_base);
 };
 
-struct impl3 : base {
+class impl3 : public test_base {
 	ctr_counter counter{};
-	PV_IMPL(base);
+	PV_IMPL(test_base);
 };
 
 
 TEST_CASE("poly_vector specification") {
 	SECTION("A new poly_vector is empty") {
-        kg::poly_vector<base> vec;
+        kg::poly_vector<test_base> vec;
         CHECK(0 == vec.size());
 	}
 
 	SECTION("An empty poly_vector") {
 		SECTION("grows when data is added to it") {
-            kg::poly_vector<base> vec;
+            kg::poly_vector<test_base> vec;
 
             impl1 t{2};
             vec.add(t);
@@ -97,7 +100,7 @@ TEST_CASE("poly_vector specification") {
 
 	SECTION("Adding data to non-empty pv") {
 		SECTION("works with different types") {
-            kg::poly_vector<base> vec;
+            kg::poly_vector<test_base> vec;
 
             constexpr int num_values = 56;
 
@@ -122,7 +125,7 @@ TEST_CASE("poly_vector specification") {
 
 	SECTION("data is destructed properly") {
         {
-            kg::poly_vector<base> pv;
+            kg::poly_vector<test_base> pv;
             pv.add(impl3{});
         }
         CHECK(ctr_counter::ctr_count == 2); // construction + move
@@ -132,7 +135,7 @@ TEST_CASE("poly_vector specification") {
         CHECK(ctr_counter::dtr_count == 2);
 
         {
-            kg::poly_vector<base> pv;
+            kg::poly_vector<test_base> pv;
             pv.add(impl3{});
         }
         CHECK(ctr_counter::ctr_count == 4); // construction + move

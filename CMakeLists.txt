@@ -19,7 +19,7 @@ endif ()
 if (MSVC)
     # warning level 4
     target_compile_options(poly_vector INTERFACE
-        /std:c++latest
+        /std:c++20
 
         # enable lots of warnings
         /W4
